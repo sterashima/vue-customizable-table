@@ -83,7 +83,7 @@ export default Vue.extend({
      */
     visibleButtons: {
       type: Number,
-      default: 5,
+      default: 10,
     },
 
     /**
