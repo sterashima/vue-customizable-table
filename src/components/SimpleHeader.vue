@@ -1,14 +1,22 @@
 <template>
 <vRow :row="labels" :useExtra="extraColName != null">
-  <vHeaderCell slot-scope="props" :cell="props.cell"/>
+  <template slot-scope="props">
+    <vHeaderCell :cell="props.cell" v-if="sort == undefined" />
+    <vSortCell :label="props.cell" :isSort="props.cell == sort.label" :isAsc="sort.isAsc" v-else/>
+  </template>
   <vHeaderCell :cell="extraColName" v-if="extraColName != null" slot="extra" />
 </vRow>
 </template>
 
 <script lang="ts">
+interface Sort {
+  label: string;
+  isAsc: boolean;
+}
 import Vue from 'vue';
 import vRow from './Row.vue';
 import vHeaderCell from './HeaderCell.vue';
+import vSortCell from './SortCell.vue';
 export default {
   name: 'vSimpleHeader',
   props: {
@@ -26,9 +34,15 @@ export default {
       type: Array,
       required: true,
     },
+    /**
+     * Sort
+     */
+    sort: {
+      type: Object as () => Sort,
+    },
   },
   components: {
-    vHeaderCell, vRow,
+    vHeaderCell, vRow, vSortCell,
   },
 };
 </script>
@@ -55,5 +69,22 @@ With extra cell:
 <vSimpleHeader :labels="[1,2,3,4,5,6,7]" extraColName="Action" />
 </table>
 ```
+
+Sort header:
+
+```jsx
+<table style="width:100%">
+<vSimpleHeader :labels="[1,2,3,4,5,6,7]" extraColName="Action" :sort="{label: '1', isAsc: true}"/>
+</table>
+```
+
+Custom sort cell:
+
+```jsx
+<table style="width:100%">
+<vSimpleHeader :labels="[1,2,3,4,5,6,7]" extraColName="Action" :sort="{label: '1', isAsc: true}"/>
+</table>
+```
+
 </docs>
 

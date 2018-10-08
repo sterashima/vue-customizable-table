@@ -96,34 +96,34 @@ export default Vue.extend({
     },
   },
   computed: {
-    items(): (string | number)[] {
+    items(): Array<string | number> {
       const maxLength = this.visibleButtons;
       if (this.length <= maxLength) {
-        return this.range(1, this.length)
+        return this.range(1, this.length);
       }
 
-      const even = maxLength % 2 === 0 ? 1 : 0
-      const left = Math.floor(maxLength / 2)
-      const right = this.length - left + 1 + even
+      const even = maxLength % 2 === 0 ? 1 : 0;
+      const left = Math.floor(maxLength / 2);
+      const right = this.length - left + 1 + even;
       if (this.value > left && this.value < right) {
-        const start = this.value - left + 2
-        const end = this.value + left - 2 - even
-        return [1, '...', ...this.range(start, end), '...', this.length]
+        const start = this.value - left + 2;
+        const end = this.value + left - 2 - even;
+        return [1, '...', ...this.range(start, end), '...', this.length];
 
       } else if (this.value === left) {
-        const end = this.value + left - 1 - even
-        return [...this.range(1, end), '...', this.length]
+        const end = this.value + left - 1 - even;
+        return [...this.range(1, end), '...', this.length];
 
       } else if (this.value === right) {
-        const start = this.value - left + 1
-        return [1, '...', ...this.range(start, this.length)]
+        const start = this.value - left + 1;
+        return [1, '...', ...this.range(start, this.length)];
 
       } else {
         return [
           ...this.range(1, left),
           '...',
-          ...this.range(right, this.length)
-        ]
+          ...this.range(right, this.length),
+        ];
       }
     },
   },
@@ -143,7 +143,7 @@ export default Vue.extend({
         return;
       }
       this.$emit('input', this.value - 1 );
-      this.$emit('previous' );
+      this.$emit('previous');
     },
     range(from: number, to: number ): number[] {
       const range: number[] = [];
@@ -162,29 +162,35 @@ export default Vue.extend({
 
 The simple pager:
 
-```jsx
-<vPager :value="0" :length="5"/>
-```
-
-```jsx
-<vPager :value="0" :length="20"/>
-```
-
-```jsx
-<vPager :value="10" :length="20"/>
-```
-
-```jsx
-<vPager :value="19" :length="20"/>
+```js
+new Vue({
+  data(){
+    return {
+      page: 0,
+      maxPage: 20
+    }
+  },
+  template: `<vPager v-model="page" :length="maxPage"/>`
+})
 ```
 
 Custom pagenation button: 
 
-```jsx
-<vPager :value="19" :length="20">
-  <button slot="prevPage" slot-scope="props" :disabled="props.disabled">Prev</button>
-  <button slot-scope="props" :disabled="props.active">{{props.page}}</button>
-  <button slot="nextPage" slot-scope="props" :disabled="props.disabled">Next</button>
-</vPager>
+```js
+new Vue({
+  data(){
+    return {
+      page: 0,
+      maxPage: 20
+    }
+  },
+  template: `
+    <vPager v-model="page" :length="maxPage">
+      <button slot="prevPage" slot-scope="props" :disabled="props.disabled">Prev</button>
+      <button slot-scope="props" :disabled="props.active">{{props.page}}</button>
+      <button slot="nextPage" slot-scope="props" :disabled="props.disabled">Next</button>
+    </vPager>
+  `
+})
 ```
 </docs>
